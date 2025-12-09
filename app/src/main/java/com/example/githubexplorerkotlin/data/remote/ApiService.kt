@@ -1,6 +1,6 @@
 package com.example.githubexplorerkotlin.data.remote
 
-import com.example.githubexplorerkotlin.data.model.Repo
+import com.example.githubexplorerkotlin.data.model.repo.Repo
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,12 +1,14 @@
-package com.example.githubexplorerkotlin.data.model
+package com.example.githubexplorerkotlin.data.model.repo
 
 
+import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Owner(
     @Json(name = "avatar_url")
+    @SerializedName("avatar_url")
     val avatarUrl: String?,
     @Json(name = "events_url")
     val eventsUrl: String?,

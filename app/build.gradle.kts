@@ -70,4 +70,5 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.15.2") // Check for the latest version
     // If using Kapt:
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
+    implementation("com.github.bumptech.glide:glide:5.0.5")
 }

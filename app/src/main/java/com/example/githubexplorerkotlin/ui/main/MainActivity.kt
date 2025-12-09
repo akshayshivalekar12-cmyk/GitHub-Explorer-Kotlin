@@ -3,22 +3,26 @@ package com.example.githubexplorerkotlin.ui.main
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubexplorerkotlin.R
 import com.example.githubexplorerkotlin.data.local.DatabaseProvider
 import com.example.githubexplorerkotlin.data.repository.MainRepository
 import com.example.githubexplorerkotlin.ui.adapter.RepoAdapter
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var repoAdapter: RepoAdapter
     private lateinit var mainViewModel: MainViewModel
+    var q : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,38 +34,58 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        showRepos()
+        setupUi()
+        setupViewModel()
+        setupObservers()
     }
 
-    private fun showRepos() {
-        val dao = DatabaseProvider.getDatabase(this).repoDao()
-        val repo = MainRepository(dao)
-        mainViewModel = ViewModelProvider.create(this, MainVMFactory(repo))[MainViewModel::class.java]
-
+    private fun setupUi(){
         val rvRepo = findViewById<RecyclerView>(R.id.rvRepo)
-        repoAdapter = RepoAdapter(arrayListOf())
+
+        repoAdapter = RepoAdapter(
+            repos = emptyList(),
+            onItemClick = { repo ->
+                Toast.makeText(this, repo.name, Toast.LENGTH_SHORT).show()
+            },
+            onFavClick = { repo ->
+                mainViewModel.toggleFavourite(repo)
+            }
+        )
+
         rvRepo.layoutManager = LinearLayoutManager(this)
         rvRepo.adapter = repoAdapter
 
-        val progressBar = findViewById<ProgressBar>(R.id.progressbar)
-
         val search = findViewById<SearchView>(R.id.searchView)
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) mainViewModel.searchRepos(query)
+                query?.let { mainViewModel.searchRepos(it) }
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?) = false
+            override fun onQueryTextChange(newText: String?): Boolean = false
         })
+    }
 
-        mainViewModel.repos.observe(this){repos ->
+    private fun setupViewModel(){
+        val dao = DatabaseProvider.getDatabase(this).repoDao()
+        val repository = MainRepository(dao)
+
+        mainViewModel = ViewModelProvider(
+            this,
+            VMFactory(repository)
+        )[MainViewModel::class.java]
+    }
+
+    private fun setupObservers(){
+        val progressBar = findViewById<ProgressBar>(R.id.progressbar)
+
+        mainViewModel.loading.observe(this) { loading ->
+            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        }
+
+        mainViewModel.repos.observe(this) { repos ->
             repoAdapter.updateRepos(repos)
         }
-
-        mainViewModel.loading.observe(this){loading ->
-            progressBar.visibility = if(loading) View.VISIBLE else View.GONE
-        }
-
     }
+
 }

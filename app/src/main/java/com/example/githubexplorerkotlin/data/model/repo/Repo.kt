@@ -1,4 +1,4 @@
-package com.example.githubexplorerkotlin.data.model
+package com.example.githubexplorerkotlin.data.model.repo
 
 
 import com.squareup.moshi.Json

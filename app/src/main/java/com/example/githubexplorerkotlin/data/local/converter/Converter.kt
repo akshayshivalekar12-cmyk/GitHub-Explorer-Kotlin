@@ -1,9 +1,8 @@
 package com.example.githubexplorerkotlin.data.local.converter
 
 import androidx.room.TypeConverter
-import com.example.githubexplorerkotlin.data.model.Item
-import com.example.githubexplorerkotlin.data.model.License
-import com.example.githubexplorerkotlin.data.model.Owner
+import com.example.githubexplorerkotlin.data.model.repo.License
+import com.example.githubexplorerkotlin.data.model.repo.Owner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

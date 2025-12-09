@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubexplorerkotlin.data.model.Item
+import com.example.githubexplorerkotlin.data.model.repo.Item
 import com.example.githubexplorerkotlin.data.repository.MainRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val repo: MainRepository) : ViewModel() {
+class MainViewModel(private val repository: MainRepository) : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
     val loading : LiveData<Boolean> = _loading
 
@@ -19,13 +19,22 @@ class MainViewModel(private val repo: MainRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 _loading.value = true
-                val results = repo.searchRepos(query)
+                val results = repository.searchRepos(query)
                 _repos.value = results
             }catch (e: Exception){
-                _repos.value = repo.getCachedRepos()
+                _repos.value = repository.getCachedRepos()
             }finally {
                 _loading.value = false
             }
+        }
+    }
+
+    fun toggleFavourite(repo: Item){
+        viewModelScope.launch {
+            val newState = !repo.isFavourite
+            repository.toggleFavourites(repo)
+            repo.isFavourite = newState
+            _repos.value = _repos.value
         }
     }
 }

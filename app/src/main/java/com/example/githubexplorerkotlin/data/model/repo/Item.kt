@@ -1,4 +1,4 @@
-package com.example.githubexplorerkotlin.data.model
+package com.example.githubexplorerkotlin.data.model.repo
 
 
 import androidx.room.Entity
@@ -176,5 +176,7 @@ data class Item(
     @Json(name = "watchers_count")
     val watchersCount: Int?,
     @Json(name = "web_commit_signoff_required")
-    val webCommitSignoffRequired: Boolean?
+    val webCommitSignoffRequired: Boolean?,
+
+    var isFavourite: Boolean = false
 )
