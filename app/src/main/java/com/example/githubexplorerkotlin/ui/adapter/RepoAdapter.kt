@@ -23,7 +23,7 @@ class RepoAdapter(private var repos: List<Item>) : RecyclerView.Adapter<RepoAdap
     ) {
         val repo = repos[position]
 //        holder.title.text = repo.name
-        holder.name.text = repo.full_name
+        holder.name.text = repo.name
     }
 
     override fun getItemCount() = repos.size

@@ -5,20 +5,52 @@ import com.example.githubexplorerkotlin.data.model.Item
 import com.example.githubexplorerkotlin.data.model.License
 import com.example.githubexplorerkotlin.data.model.Owner
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class Converter {
+    private val gson = Gson()
+
     @TypeConverter
-    fun fromItem(item: Item) : String? {
-        return Gson().toJson(item)
+    fun licenseToJson(license: License?) : String?{
+        license.let {
+           return gson.toJson(license)
+        }
     }
 
     @TypeConverter
-    fun fromLicense(license: License) : String? {
-        return Gson().toJson(license)
+    fun jsonToLicense(json: String?): License?{
+        json.let {
+            return gson.fromJson(json, License::class.java)
+        }
     }
 
     @TypeConverter
-    fun fromOwner(owner: Owner) : String? {
-        return Gson().toJson(owner)
+    fun ownerToJson(owner: Owner?) : String? {
+        owner.let {
+            return gson.toJson(owner)
+        }
     }
+
+    @TypeConverter
+    fun jsonToOwner(json: String?) : Owner? {
+        json.let {
+            return gson.fromJson(json, Owner::class.java)
+        }
+    }
+
+    @TypeConverter
+    fun listToJson(list: List<String>?) : String? {
+        list.let {
+            return gson.toJson(list)
+        }
+    }
+
+    @TypeConverter
+    fun jsonToList(json: String?) : List<String>?{
+        json.let {
+            return gson.fromJson(json, object : TypeToken<List<String>>() {}.type)
+        }
+    }
+
+
 }

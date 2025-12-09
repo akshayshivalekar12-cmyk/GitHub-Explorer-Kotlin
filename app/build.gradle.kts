@@ -65,4 +65,9 @@ dependencies {
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle_version}")
+
+    // Moshi Kotlin extensions for data classes and sealed classes
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.2") // Check for the latest version
+    // If using Kapt:
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 }
