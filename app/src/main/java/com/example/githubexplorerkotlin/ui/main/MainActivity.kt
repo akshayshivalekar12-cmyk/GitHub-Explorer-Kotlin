@@ -22,8 +22,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var repoAdapter: RepoAdapter
     private lateinit var mainViewModel: MainViewModel
-    var q : String? = ""
-
+	
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
